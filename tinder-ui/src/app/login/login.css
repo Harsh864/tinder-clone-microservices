@@ -1,0 +1,157 @@
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff4e50, #fc6076, #ff758c);
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.logo h1 {
+    color: #ff4e50;
+    margin-bottom: 5px;
+}
+
+.logo p {
+    color: #777;
+    font-size: 14px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+    margin-right: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #ff4e50;
+    box-shadow: 0 0 5px rgba(255, 78, 80, 0.4);
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.links span:hover {
+    color: #ff4e50;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #ff4e50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #e84345;
+}
+
+.divider {
+    margin: 20px 0;
+    position: relative;
+    text-align: center;
+    color: #aaa;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    width: 40%;
+    height: 1px;
+    background: #ddd;
+    left: 0;
+    top: 50%;
+}
+
+.divider::after {
+    content: "";
+    position: absolute;
+    width: 40%;
+    height: 1px;
+    background: #ddd;
+    right: 0;
+    top: 50%;
+}
+
+.social-buttons button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.social-buttons button:hover {
+    background: #f5f5f5;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.links a {
+    text-decoration: none;
+    color: #ff4e50;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-btn:disabled {
+    background: #cfd8dc;
+    /* greyed out */
+    color: #78909c;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.7;
+}

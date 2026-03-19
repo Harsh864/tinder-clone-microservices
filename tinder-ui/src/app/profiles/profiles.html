@@ -1,0 +1,19 @@
+<div class="page">
+    <div class="wrapper">
+        <div class="card">
+            <img [src]="profiles[index].image" />
+
+            <div class="overlay">
+                <div class="text">
+                    <h2>{{profiles[index].name}}, {{profiles[index].age}}</h2>
+                    <p>{{profiles[index].bio}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="dislike" (click)="swipe('dislike')">✕</button>
+            <button class="like" (click)="swipe('like')">❤</button>
+        </div>
+    </div>
+</div>

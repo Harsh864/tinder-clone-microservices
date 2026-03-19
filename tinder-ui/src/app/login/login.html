@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="card animate-fadeIn">
+        <!-- Logo -->
+        <div class="logo">
+            <h1>LoveConnect</h1>
+            <p>Find your perfect match ❤️</p>
+        </div>
+
+        <!-- Form -->
+        <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" [(ngModel)]="loginData.email" required
+                    placeholder="Enter your email" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" [(ngModel)]="loginData.password" required
+                    placeholder="Enter your password" />
+            </div>
+
+            <div class="links">
+                <span>Forgot Password?</span>
+                <a routerLink="/register">Sign Up</a>
+            </div>
+
+            <button type="submit" [disabled]="loginForm.invalid" class="login-btn">Login</button>
+        </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-buttons">
+            <button>Continue with Google</button>
+            <button>Continue with Facebook</button>
+        </div>
+    </div>
+</div>

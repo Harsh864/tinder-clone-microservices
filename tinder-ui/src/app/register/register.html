@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="card">
+
+        <div class="header">
+            <h1>Join Now ❤️</h1>
+            <p>Create your profile and start matching</p>
+        </div>
+
+        <form (ngSubmit)="onRegister()" #formValid="ngForm">
+
+            <div class="field">
+                <input type="text" name="name" [(ngModel)]="registerData.name" required />
+                <label>Full Name</label>
+            </div>
+
+            <div class="field">
+                <input type="email" name="email" [(ngModel)]="registerData.email" required />
+                <label>Email Address</label>
+            </div>
+
+            <div class="field">
+                <input type="number" name="age" [(ngModel)]="registerData.age" required />
+                <label>Age</label>
+            </div>
+
+            <div class="gender-group">
+                <label class="gender-label">Gender</label>
+
+                <div class="gender-options">
+
+                    <label>
+                        <input type="radio" name="gender" value="male" [(ngModel)]="registerData.gender" />
+                        <span>Male</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="gender" value="female" [(ngModel)]="registerData.gender" />
+                        <span>Female</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="gender" value="other" [(ngModel)]="registerData.gender" />
+                        <span>Other</span>
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="field">
+                <input type="password" name="password" [(ngModel)]="registerData.password" required />
+                <label>Password</label>
+            </div>
+
+            <div class="field">
+                <input type="password" name="cpassword" [(ngModel)]="registerData.cpassword" required />
+                <label>Confirm Password</label>
+            </div>
+
+            <button type="submit" [disabled]="formValid.invalid || !correctPassword" class="register-btn">Create
+                Account</button>
+
+        </form>
+
+        <div class="footer">
+            Already have an account? <a class="login-btn" routerLink="/login">Login</a>
+        </div>
+
+    </div>
+</div>
