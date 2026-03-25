@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <h1>Complete Your Profile ❤️</h1>
+      <p>Tell us more about you</p>
+    </div>
+
+    <form>
+
+      <!-- Bio -->
+      <div class="field textarea-field">
+        <textarea [(ngModel)]="profile.bio" name="bio" required></textarea>
+        <label>Bio</label>
+      </div>
+
+      <!-- Interests -->
+      <div class="field">
+        <input 
+          type="text" 
+          [(ngModel)]="profile.interests" 
+          name="interests" 
+          required />
+        <label>Interests (e.g. Travel, Music)</label>
+      </div>
+
+      <!-- Image URL -->
+      <div class="field">
+        <input 
+          type="text" 
+          [(ngModel)]="profile.imageUrl" 
+          name="imageUrl" 
+          required />
+        <label>Profile Image URL</label>
+      </div>
+
+      <!-- Image Preview -->
+      <div class="image-preview" *ngIf="profile.imageUrl">
+        <img [src]="profile.imageUrl" />
+      </div>
+
+      <!-- Button -->
+      <button type="button" (click)="saveProfile()">
+        Continue
+      </button>
+
+    </form>
+
+  </div>
+</div>

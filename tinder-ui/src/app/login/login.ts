@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../services/auth/auth';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,19 @@ export class Login {
     password: ''
   };
 
+  constructor(private loginUser: Auth, private router: Router) {}
+
   onLogin() {
-    console.log('Login Data:', this.loginData);
+    this.loginUser.loginUser(this.loginData.email, this.loginData.password).subscribe({
+      next: (response) => {
+        console.log(response);
+        localStorage.setItem('user', this.loginData.email);
+        if (response === "User successfully logged in...")
+          this.router.navigate(['/profile'])
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    });
   }
 }

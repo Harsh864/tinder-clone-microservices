@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: authService
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/tinder
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8081
+
+
+
+

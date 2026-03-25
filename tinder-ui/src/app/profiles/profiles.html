@@ -1,19 +1,61 @@
 <div class="page">
-    <div class="wrapper">
+    <div class="wrapper" *ngIf="profiles.length > 0; else noProfiles">
         <div class="card">
-            <img [src]="profiles[index].image" />
-
+            <img [src]="profiles[index].imageUrl" />
             <div class="overlay">
                 <div class="text">
-                    <h2>{{profiles[index].name}}, {{profiles[index].age}}</h2>
-                    <p>{{profiles[index].bio}}</p>
+                    <h2>{{ profiles[index].name }}, {{ profiles[index].age }}</h2>
+                    <p>{{ profiles[index].bio }}</p>
                 </div>
             </div>
         </div>
 
         <div class="actions">
-            <button class="dislike" (click)="swipe('dislike')">✕</button>
-            <button class="like" (click)="swipe('like')">❤</button>
+            <button class="dislike" (click)="swipe('DISLIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">✕</button>
+            <button class="like" (click)="swipe('LIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">❤</button>
         </div>
     </div>
+
+    <ng-template #noProfiles>
+        <p>Loading profiles...</p>
+    </ng-template>
+</div>
+
+<!-- pop up -->
+ <div class="match-overlay" *ngIf="isMatch">
+  <div class="match-card">
+
+    <h2 class="match-title">It's a Match</h2>
+
+    <div class="match-users">
+      <div class="user">
+        <img [src]="currentUser.imageUrl" />
+        <p>You</p>
+      </div>
+
+      <div class="heart">❤️</div>
+
+      <div class="user">
+        <img [src]="matchedProfile?.imageUrl" />
+        <p>{{ matchedProfile?.name }}</p>
+      </div>
+    </div>
+
+    <p class="match-subtext">
+      You both liked each other
+    </p>
+
+    <div class="match-actions">
+      <button class="primary-btn">Start Chat</button>
+      <button class="secondary-btn" (click)="closeMatch()">Keep Swiping</button>
+    </div>
+
+  </div>
+  <!-- floating hearts -->
+   <div class="hearts">
+    <span>❤️</span>
+    <span>💖</span>
+    <span>💕</span>
+    <span>💘</span>
+  </div>
 </div>

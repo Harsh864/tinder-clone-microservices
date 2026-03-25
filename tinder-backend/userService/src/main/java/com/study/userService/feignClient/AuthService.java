@@ -1,0 +1,16 @@
+package com.study.userService.feignClient;
+
+
+import com.study.userService.dto.UserProfileResponse;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@FeignClient(name = "authService")
+public interface AuthService {
+
+    @GetMapping("/auth/getUserProfile/{email}")
+    public UserProfileResponse getUserProfile(@PathVariable String email);
+
+}

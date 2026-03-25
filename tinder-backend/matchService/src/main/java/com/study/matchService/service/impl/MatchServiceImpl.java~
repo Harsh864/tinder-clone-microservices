@@ -1,0 +1,43 @@
+package com.study.matchService.service.impl;
+
+import com.study.matchService.entity.Swipes;
+import com.study.matchService.repository.MatchRepository;
+import com.study.matchService.repository.SwipeRepository;
+import com.study.matchService.service.MatchService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MatchServiceImpl implements MatchService {
+
+    private final MatchRepository matchRepository;
+
+    private final SwipeRepository swipeRepository;
+
+    public MatchServiceImpl(MatchRepository matchRepository, SwipeRepository swipeRepository) {
+        this.matchRepository = matchRepository;
+        this.swipeRepository = swipeRepository;
+    }
+
+    @Override
+    public boolean swipe(String user1, String user2, Swipes.SwipeType type) {
+        swipeRepository.save(new Swipes(user1, user2, type));
+
+        if (type == Swipes.SwipeType.LIKE) {
+            boolean isMatch = swipeRepository
+                    .existsBySwiperIdAndSwipedIdAndType(user1, user2, Swipes.SwipeType.LIKE);
+            if (isMatch) {
+//                match(user1, user2);
+                return true;
+            }
+        }
+        return false;
+    }
+
+//    @Override
+//    public String match(String user1, String user2) {
+//        return "";
+//    }
+
+
+
+}
