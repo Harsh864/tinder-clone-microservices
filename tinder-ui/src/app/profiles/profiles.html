@@ -1,61 +1,89 @@
 <div class="page">
-    <div class="wrapper" *ngIf="profiles.length > 0; else noProfiles">
-        <div class="card">
-            <img [src]="profiles[index].imageUrl" />
-            <div class="overlay">
-                <div class="text">
-                    <h2>{{ profiles[index].name }}, {{ profiles[index].age }}</h2>
-                    <p>{{ profiles[index].bio }}</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="actions">
-            <button class="dislike" (click)="swipe('DISLIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">✕</button>
-            <button class="like" (click)="swipe('LIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">❤</button>
-        </div>
+  <!-- TOP NAV BAR -->
+  <div class="top-bar">
+    <div class="logo">👀</div>
+    <div class="user-pill" routerLink="/profile">
+      <img [src]="currentUser.imageUrl || 'assets/default-avatar.png'" />
+      <span>{{ currentUser.name }}</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper" *ngIf="profiles.length > 0; else noProfiles">
+
+    <!-- progress dots -->
+    <div class="progress-dots">
+      <div *ngFor="let p of profiles; let i = index"
+           [ngClass]="i === index ? 'dot active' : 'dot'">
+      </div>
     </div>
 
-    <ng-template #noProfiles>
-        <p>Loading profiles...</p>
-    </ng-template>
+    <!-- card stack -->
+    <div class="card-stack">
+      <div class="card-bg"></div>
+      <div class="card">
+        <img [src]="profiles[index].imageUrl" />
+        <div class="card-gradient"></div>
+        <div class="card-info">
+          <div class="card-name">{{ profiles[index].name }}, {{ profiles[index].age }}</div>
+          <div class="card-bio">{{ profiles[index].bio }}</div>
+          <div class="card-tags">
+            <span class="tag">{{ profiles[index].gender }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- action buttons -->
+    <div class="actions">
+      <button class="action-btn btn-dislike"
+        (click)="swipe('DISLIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">
+        ✕
+      </button>
+      <button class="action-btn btn-like"
+        (click)="swipe('LIKE', profiles[index].email, profiles[index].imageUrl, profiles[index].name)">
+        ❤
+      </button>
+      <button class="action-btn btn-super">★</button>
+    </div>
+
+  </div>
+
+  <ng-template #noProfiles>
+    <div class="empty-state">
+      <div class="empty-icon">🔥</div>
+      <p>No more profiles nearby</p>
+      <span>Check back later!</span>
+    </div>
+  </ng-template>
+
 </div>
 
-<!-- pop up -->
- <div class="match-overlay" *ngIf="isMatch">
+<!-- MATCH POPUP -->
+<div class="match-overlay" *ngIf="isMatch">
+  <div class="hearts">
+    <span>❤️</span><span>💖</span><span>💕</span><span>💘</span>
+  </div>
   <div class="match-card">
-
-    <h2 class="match-title">It's a Match</h2>
-
+    <div class="match-badge">It's a Match</div>
+    <p class="match-subtext">You both liked each other!</p>
     <div class="match-users">
       <div class="user">
         <img [src]="currentUser.imageUrl" />
         <p>You</p>
       </div>
-
       <div class="heart">❤️</div>
-
       <div class="user">
         <img [src]="matchedProfile?.imageUrl" />
         <p>{{ matchedProfile?.name }}</p>
       </div>
     </div>
-
-    <p class="match-subtext">
-      You both liked each other
-    </p>
-
     <div class="match-actions">
-      <button class="primary-btn">Start Chat</button>
+      <button class="primary-btn" (click)="openChat()">Start Chat</button>
       <button class="secondary-btn" (click)="closeMatch()">Keep Swiping</button>
     </div>
-
-  </div>
-  <!-- floating hearts -->
-   <div class="hearts">
-    <span>❤️</span>
-    <span>💖</span>
-    <span>💕</span>
-    <span>💘</span>
   </div>
 </div>
+
+<app-floating-header></app-floating-header>

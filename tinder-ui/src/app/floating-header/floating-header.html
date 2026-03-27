@@ -1,0 +1,63 @@
+<div class="floating-container">
+
+    <div class="chat-panel" *ngIf="showPanel">
+
+        <div class="panel-header">
+            <div class="panel-header-left">
+                <span class="flame">🔥</span>
+                <div>
+                    <div class="panel-title">Messages</div>
+                    <div class="panel-subtitle">{{ chats.length }} matches</div>
+                </div>
+            </div>
+            <button class="logout-btn" (click)="logout()">
+                <svg viewBox="0 0 24 24" class="logout-icon">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+                </svg>
+                Sign out
+            </button>
+        </div>
+
+        <div class="chat-list">
+            <div *ngFor="let chat of chats" class="chat-item" (click)="openChat(chat)">
+                <div class="avatar-wrap">
+                    <img
+                        *ngIf="chat.otherUserImageUrl"
+                        [src]="chat.otherUserImageUrl"
+                        class="avatar-img"
+                        [alt]="chat.otherUserName"
+                    />
+                    <div
+                        *ngIf="!chat.otherUserImageUrl"
+                        class="avatar-initials">
+                        {{ chat.otherUserName?.charAt(0) | uppercase }}
+                    </div>
+                    <span class="online-dot" *ngIf="chat.online"></span>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-name">{{ chat.otherUserName }}</div>
+                    <div class="chat-last">{{chat.sender}} : {{ chat.lastMessage }}</div>
+                </div>
+                <div class="chat-right">
+                    <span class="chat-time">{{ chat.lastTimestamp | date:'shortTime' }}</span>
+                    <span class="unread" *ngIf="chat.unreadCount > 0">{{ chat.unreadCount }}</span>
+                </div>
+            </div>
+
+            <div *ngIf="chats.length === 0" class="empty-state">
+                <div class="empty-icon">💬</div>
+                <div class="empty-title">No messages yet</div>
+                <div class="empty-sub">Start swiping to get matches!</div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="fab" (click)="togglePanel()">
+        <svg viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        <span class="badge" *ngIf="totalUnread > 0">{{ totalUnread }}</span>
+    </button>
+
+</div>

@@ -33,9 +33,10 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile updated successfully");
     }
 
-    @GetMapping("/allProfile")
-    public List<ProfileResponse> getAllProfile() {
-        return profileService.getAllProfile();
+    @GetMapping("/allProfile/{email}")
+    public List<ProfileResponse> getAllProfile(@PathVariable String email) {
+        System.out.println("Incoming email: " + email);
+        return profileService.getAllProfile(email);
     }
 
 }

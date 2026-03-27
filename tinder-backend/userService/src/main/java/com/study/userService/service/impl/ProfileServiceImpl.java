@@ -42,8 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ProfileResponse> getAllProfile() {
+    public List<ProfileResponse> getAllProfile(String email) {
         List<Profile> profiles = profileRepository.findAll();
-        return profiles.stream().map(profile -> new ProfileResponse(profile.getName(), profile.getEmail(), profile.getAge(), profile.getBio(), profile.getImageUrl())).toList();
+        return profiles.stream().filter(f -> !f.getEmail().equals(email)).map(profile -> new ProfileResponse(profile.getName(), profile.getEmail(), profile.getAge(), profile.getBio(), profile.getImageUrl())).toList();
     }
 }

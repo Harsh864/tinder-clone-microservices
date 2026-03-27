@@ -11,5 +11,5 @@ public interface ProfileService {
 
     void updateProfile(ProfileRequest profile);
 
-    List<ProfileResponse> getAllProfile();
+    List<ProfileResponse> getAllProfile(String email);
 }

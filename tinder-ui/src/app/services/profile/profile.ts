@@ -20,8 +20,8 @@ export class Profile {
 
   baseUrl: string = "http://localhost:8082/profile";
 
-  getAllProfile(): Observable<AllProfiles[]> {
-    return this.http.get<AllProfiles[]>(this.baseUrl + "/allProfile");
+  getAllProfile(email: string): Observable<AllProfiles[]> {
+    return this.http.get<AllProfiles[]>(this.baseUrl + "/allProfile/" + email);
   }
 
 }
