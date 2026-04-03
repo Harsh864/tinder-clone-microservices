@@ -21,8 +21,8 @@ export class Login {
     this.loginUser.loginUser(this.loginData.email, this.loginData.password).subscribe({
       next: (response) => {
         console.log(response);
-        localStorage.setItem('user', this.loginData.email);
-        if (response === "User successfully logged in...")
+        localStorage.setItem('token', response.token);
+        if (localStorage.getItem('token') != null)
           this.router.navigate(['/profile'])
       },
       error: (error) => {

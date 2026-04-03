@@ -9,7 +9,7 @@ public interface ProfileService {
 
     ProfileResponse isUserProfileCompleted(String email);
 
-    void updateProfile(ProfileRequest profile);
+    void updateProfile(ProfileRequest profile, String email, String token);
 
     List<ProfileResponse> getAllProfile(String email);
 }

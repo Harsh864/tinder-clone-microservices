@@ -6,6 +6,7 @@ import com.study.authService.dto.UserProfileResponse;
 import com.study.authService.entity.Auth;
 import com.study.authService.repository.AuthRepository;
 import com.study.authService.service.AuthService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,19 +14,22 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository authRepository;
 
-    public AuthServiceImpl(AuthRepository authRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthServiceImpl(AuthRepository authRepository, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public String login(LoginRequest request) {
+    public Auth login(LoginRequest request) {
         Auth user = authRepository.findByEmail(request.getEmail());
 
-        if (user != null && user.getPassword().equals(request.getPassword())) {
-            return "User successfully logged in...";
+        if (user == null) {
+            throw new RuntimeException("User not found");
         }
 
-        return "User not found or Invalid credentials";
+        return user;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
         authRepository.save(new Auth(request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                passwordEncoder.encode(request.getPassword()),
                 request.getAge(),
                 request.getGender()));
         return "User successfully registered...";

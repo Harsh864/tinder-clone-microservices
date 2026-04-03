@@ -22,8 +22,8 @@ export class ProfileForm {
 
   saveProfile() {
     console.log(this.profile)
-    const email: string = localStorage.getItem('user') ?? '';
-    this.profileForm.updateUserProfile({email: email, bio: this.profile.bio, interests: this.profile.interests, imageUrl: this.profile.imageUrl}).subscribe({
+    // const email: string = localStorage.getItem('user') ?? '';
+    this.profileForm.updateUserProfile({bio: this.profile.bio, interests: this.profile.interests, imageUrl: this.profile.imageUrl}).subscribe({
       next: (data) => {
         this.router.navigate(["/profile"]);
       },

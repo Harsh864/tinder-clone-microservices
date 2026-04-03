@@ -37,7 +37,7 @@ export class Profiles implements OnInit {
   email: string = '';  
 
   ngOnInit(): void {
-    this.email = localStorage.getItem('user') ?? ''; 
+    // this.email = localStorage.getItem('user') ?? ''; 
     this.getUserProfileUpdate();  
   }
 
@@ -45,7 +45,7 @@ export class Profiles implements OnInit {
     console.log(action);
     const currentProfile = this.profiles[this.index];
 
-    this.matches.swipeUser(this.email, id, action).subscribe({  
+    this.matches.swipeUser(id, action).subscribe({  
       next: (data) => {
         if (data === true) {
           this.isMatch = true;
@@ -63,7 +63,7 @@ export class Profiles implements OnInit {
 
   getUserProfileUpdate(): void {
     console.log('1. fetching user profile for:', this.email);
-    this.profileForm.getUserProfileUpdated(this.email).subscribe({
+    this.profileForm.getUserProfileUpdated().subscribe({
       next: (data) => {
         console.log('2. user profile received:', data);
         if (data === null || data === 'null') {
@@ -108,7 +108,10 @@ export class Profiles implements OnInit {
   openChat() {
     localStorage.setItem('matchedProfile', JSON.stringify(this.matchedProfile));
     this.router.navigate(['/chat'], {
-      state: { profile: this.matchedProfile }
+      state: { 
+        profile: this.matchedProfile,
+        currentUserEmail: this.currentUser.email
+       }
     });
   }
 }

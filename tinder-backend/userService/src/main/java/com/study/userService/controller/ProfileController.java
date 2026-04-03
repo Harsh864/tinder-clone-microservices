@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
-@CrossOrigin("http://localhost:4200")
+//@CrossOrigin("http://localhost:4200")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -21,15 +21,15 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @GetMapping("/user/{email}")
-    public ProfileResponse getUserProfile(@PathVariable String email) {
+    @GetMapping("/user")
+    public ProfileResponse getUserProfile(@RequestHeader("X-User-Name") String email) {
         return profileService.isUserProfileCompleted(email);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateProfile(@RequestBody ProfileRequest request) {
+    public ResponseEntity<?> updateProfile(@RequestHeader("X-User-Name") String email, @RequestBody ProfileRequest request, @RequestHeader("Authorization") String token) {
 
-        profileService.updateProfile(request);
+        profileService.updateProfile(request, email, token);
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile updated successfully");
     }
 

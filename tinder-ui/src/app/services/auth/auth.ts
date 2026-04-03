@@ -17,10 +17,10 @@ export class Auth {
 
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:8081/auth";
+  baseUrl: string = "http://localhost:9000/auth";
 
   loginUser(email: string, password: string): Observable<any> {
-    return this.http.post<any>(this.baseUrl + "/login", { email, password }, { responseType: 'text' as 'json' });
+    return this.http.post<any>(this.baseUrl + "/login", { email, password });
   }
 
   registerUser(data: Register): Observable<any> {

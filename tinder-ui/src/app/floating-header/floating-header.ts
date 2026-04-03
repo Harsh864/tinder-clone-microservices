@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProfileForm, UserProfile } from '../services/profile-form/profile-form';
 
 @Component({
   selector: 'app-floating-header',
@@ -13,18 +14,40 @@ export class FloatingHeader {
 
   showPanel = false;
   chats: any[] = [];
+  currentUserEmail: string = '';  // store the email here
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private profileForm: ProfileForm  // inject ProfileForm service
+  ) {}
 
   ngOnInit() {
-    const currentUser = localStorage.getItem('user');
-    if (currentUser) {
-      this.http.get<any[]>(`http://localhost:8085/api/chat/chats/${currentUser}`)
-        .subscribe(data => {
-          console.log("the messages are " , data)
-          this.chats = data; 
-        });
-    }
+    // Fetch current user from backend
+    this.profileForm.getUserProfileUpdated().subscribe({
+      next: (user: UserProfile & { email: string, name: string }) => {
+        if (user && user.email) {
+          this.currentUserEmail = user.email;
+          // Now fetch chats
+          this.loadChats();
+        } else {
+          console.warn("No user profile found, redirecting to login...");
+          this.router.navigate(['/login']);
+        }
+      },
+      error: (err) => {
+        console.error("Error fetching user profile:", err);
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  loadChats() {
+    this.http.get<any[]>(`http://localhost:9000/api/chat/chats/${this.currentUserEmail}`)
+      .subscribe(data => {
+        console.log("Chats loaded:", data);
+        this.chats = data;
+      });
   }
 
   togglePanel() {
@@ -32,23 +55,23 @@ export class FloatingHeader {
   }
 
   openChat(chat: any) {
-    
-    this.router.navigate(['/chat'], { state: { profile: {
-      email: chat.otherUserEmail,
-      name: chat.otherUserName,
-      imageUrl: chat.otherUserImageUrl
-    }}});
+    this.router.navigate(['/chat'], { 
+      state: { profile: {
+        email: chat.otherUserEmail,
+        name: chat.otherUserName,
+        imageUrl: chat.otherUserImageUrl
+      },
+      currentUserEmail: this.currentUserEmail // pass current user email for chat
+      }
+    });
     this.showPanel = false;
   }
 
   logout() {
-    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 
   get totalUnread(): number {
-  return this.chats.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
-}
-
-
+    return this.chats.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+  }
 }

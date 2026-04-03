@@ -18,7 +18,7 @@ export class Profile {
 
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:8082/profile";
+  baseUrl: string = "http://localhost:9000/profile";
 
   getAllProfile(email: string): Observable<AllProfiles[]> {
     return this.http.get<AllProfiles[]>(this.baseUrl + "/allProfile/" + email);

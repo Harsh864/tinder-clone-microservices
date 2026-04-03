@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/match")
-@CrossOrigin("http://localhost:4200")
+//@CrossOrigin("http://localhost:4200")
 public class MatchController {
 
     private final MatchService matchService;
@@ -16,8 +16,8 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-    @PostMapping("/swipe/{user1}/{user2}/{type}")
-    public boolean swipe(@PathVariable String user1, @PathVariable String user2, @PathVariable Swipes.SwipeType type) {
+    @PostMapping("/swipe/{user2}/{type}")
+    public boolean swipe(@RequestHeader("X-User-Name") String user1, @PathVariable String user2, @PathVariable Swipes.SwipeType type) {
 
         return matchService.swipe(user1, user2, type);
     }

@@ -48,9 +48,9 @@ export class Chat {
     }
   }
 
-  loadMessages(sender: string, receiver: string) {
+  loadMessages(receiver: string) {
     return this.http.get<any[]>(
-      `http://localhost:8085/api/chat/${sender}/${receiver}`
+      `http://localhost:9000/api/chat/${receiver}`
     );
   }
 }

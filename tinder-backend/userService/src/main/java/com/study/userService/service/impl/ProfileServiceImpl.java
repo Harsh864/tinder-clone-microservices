@@ -31,9 +31,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateProfile(ProfileRequest profile) {
-        UserProfileResponse userProfile = authService.getUserProfile(profile.getEmail());
-        profileRepository.save(new Profile(profile.getEmail(),
+    public void updateProfile(ProfileRequest profile, String email, String token) {
+        UserProfileResponse userProfile = authService.getUserProfile(token);
+        profileRepository.save(new Profile(email,
                 userProfile.getName(),
                 userProfile.getAge(),
                 profile.getBio(),

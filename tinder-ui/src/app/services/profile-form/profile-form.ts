@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface UserProfile {
-  email: string,
   bio: string,
   interests: string,
   imageUrl: string
@@ -15,10 +14,10 @@ export interface UserProfile {
 export class ProfileForm {
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:8082/profile";
+  baseUrl: string = "http://localhost:9000/profile";
 
-  getUserProfileUpdated(email: string): Observable<any> {
-    return this.http.get<any>(this.baseUrl + "/user/" + email);
+  getUserProfileUpdated(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + "/user");
   }
 
   updateUserProfile(userProfile: UserProfile): Observable<any> {

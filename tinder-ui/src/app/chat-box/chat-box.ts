@@ -52,7 +52,7 @@ export class ChatBox implements OnInit {
   ngOnInit() {
     console.log('history.state:', history.state);
     this.matchedProfile = history.state.profile || {};
-    this.currentUser = localStorage.getItem('user')!;
+    this.currentUser = this.currentUser = history.state.currentUserEmail;
 
     console.log('matchedProfile:', this.matchedProfile);
     console.log('currentUser:', this.currentUser);
@@ -64,7 +64,6 @@ export class ChatBox implements OnInit {
 
     // Load old messages
     this.chatService.loadMessages(
-      this.currentUser,
       this.matchedProfile.email
     ).subscribe(data => {
       console.log("the messages are ***", data)

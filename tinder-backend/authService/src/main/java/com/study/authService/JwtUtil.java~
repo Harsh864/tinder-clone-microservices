@@ -1,0 +1,4 @@
+package com.study.authService;
+
+public class JwtUtil {
+}

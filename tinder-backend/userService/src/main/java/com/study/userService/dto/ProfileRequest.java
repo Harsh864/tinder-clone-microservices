@@ -2,21 +2,10 @@ package com.study.userService.dto;
 
 public class ProfileRequest {
 
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public ProfileRequest(String imageUrl, String interests, String bio, String email) {
+    public ProfileRequest(String imageUrl, String interests, String bio) {
         this.imageUrl = imageUrl;
         this.interests = interests;
         this.bio = bio;
-        this.email = email;
     }
 
     private String bio;

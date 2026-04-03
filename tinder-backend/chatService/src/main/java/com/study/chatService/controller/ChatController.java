@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class ChatController {
 
     private final MessageService service;
@@ -18,8 +18,8 @@ public class ChatController {
         this.service = service;
     }
 
-    @GetMapping("/{sender}/{receiver}")
-    public List<Message> getMessages(@PathVariable String sender, @PathVariable String receiver) {
+    @GetMapping("/{receiver}")
+    public List<Message> getMessages(@RequestHeader("X-User-Name") String sender, @PathVariable String receiver) {
         String chatId = sender.compareTo(receiver) < 0 ? sender + "_" + receiver : receiver + "_" + sender;
         return service.getChat(chatId);
     }
