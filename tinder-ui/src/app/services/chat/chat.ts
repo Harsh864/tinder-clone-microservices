@@ -12,7 +12,7 @@ export class Chat {
   connect(userId: string, onMessage: any) {
 
     this.stompClient = new Client({
-      brokerURL: 'ws://localhost:8085/chat',
+      brokerURL: 'ws://localhost:9000/chat',
 
       connectHeaders: {
         user: userId

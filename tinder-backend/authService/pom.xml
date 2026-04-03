@@ -102,6 +102,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>harsh0817/tinder:auth-service</name>
+					</image>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

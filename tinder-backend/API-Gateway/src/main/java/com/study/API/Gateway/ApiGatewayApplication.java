@@ -28,6 +28,9 @@ public class ApiGatewayApplication {
 				.route(p -> p
 						.path("/api/chat/**")
 						.uri("lb://chatService"))
+				.route(p -> p
+						.path("/chat", "/chat/**")
+						.uri("lb:ws://chatService"))
 				.build();
 	}
 

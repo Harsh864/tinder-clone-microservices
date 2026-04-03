@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tinder
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - tinder-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  eureka-server:
+    image: harsh0817/tinder:eureka-service
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - tinder-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  api-gateway:
+    image: harsh0817/tinder:api-gateway
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    networks:
+      - tinder-network
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+  user-service:
+    image: harsh0817/tinder:user-service
+    container_name: user-service
+    networks:
+      - tinder-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+  auth-service:
+    image: harsh0817/tinder:auth-service
+    container_name: auth-service
+    networks:
+      - tinder-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+  match-service:
+    image: harsh0817/tinder:match-service
+    container_name: match-service
+    networks:
+      - tinder-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+  chat-service:
+    image: harsh0817/tinder:chat-service
+    container_name: chat-service
+    networks:
+      - tinder-network
+    depends_on:
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tinder
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+volumes:
+  mysql-data:
+
+networks:
+  tinder-network:
