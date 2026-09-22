@@ -27,7 +27,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse isUserProfileCompleted(String email) {
         Profile userProfile = profileRepository.findByEmail(email);
-        return userProfile == null ? null : new ProfileResponse(userProfile.getName(), userProfile.getEmail(), userProfile.getAge(), userProfile.getBio(), userProfile.getImageUrl());
+        return userProfile == null ? null : new ProfileResponse(userProfile.getName(), userProfile.getEmail(), userProfile.getAge(), userProfile.getBio(), userProfile.getImageUrl(), userProfile.getInterests());
     }
 
     @Override
@@ -44,6 +44,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public List<ProfileResponse> getAllProfile(String email) {
         List<Profile> profiles = profileRepository.findAll();
-        return profiles.stream().filter(f -> !f.getEmail().equals(email)).map(profile -> new ProfileResponse(profile.getName(), profile.getEmail(), profile.getAge(), profile.getBio(), profile.getImageUrl())).toList();
+        return profiles.stream().filter(f -> !f.getEmail().equals(email)).map(profile -> new ProfileResponse(profile.getName(), profile.getEmail(), profile.getAge(), profile.getBio(), profile.getImageUrl(), profile.getInterests())).toList();
     }
 }
