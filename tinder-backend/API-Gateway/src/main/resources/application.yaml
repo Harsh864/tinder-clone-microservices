@@ -28,10 +28,16 @@ server:
 jwt:
   secret: justexpandingmyknowledgeinmicroserviesothaticanusemyknowledgetoachievethesomethingbig
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+services:
+  auth-service:
+    url: ${AUTH_SERVICE_URL:http://localhost:8081}
 
-  instance:
-    prefer-ip-address: true
+  user-service:
+    url: ${USER_SERVICE_URL:http://localhost:8082}
+
+  match-service:
+    url: ${MATCH_SERVICE_URL:http://localhost:8083}
+
+  chat-service:
+    url: ${CHAT_SERVICE_URL:http://localhost:8085}
+    websocket-url: ${CHAT_WEBSOCKET_URL:ws://localhost:8085}

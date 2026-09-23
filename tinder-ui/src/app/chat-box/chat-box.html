@@ -3,6 +3,7 @@
   <!-- HEADER -->
   <div class="chat-header">
     <img [src]="matchedProfile.imageUrl" class="profile-img" />
+
     <div class="user-info">
       <h3>{{ matchedProfile.name }}</h3>
       <span class="status">● Online</span>
@@ -11,21 +12,23 @@
 
   <!-- MESSAGES -->
   <div class="chat-body" #chatBody>
-    <div *ngFor="let msg of messages"
-         [ngClass]="msg.sender === currentUser ? 'message sent' : 'message received'">
-
+    <div
+      *ngFor="let msg of messages"
+      [ngClass]="msg.sender === currentUser ? 'message sent' : 'message received'"
+    >
       <p>{{ msg.content }}</p>
       <span class="time">{{ msg.timestamp | date:'shortTime' }}</span>
-
     </div>
   </div>
 
   <!-- INPUT -->
   <div class="chat-footer">
-    <input 
-      type="text" 
+    <input
+      type="text"
       [(ngModel)]="newMessage"
-      placeholder="Type a message..." />
+      placeholder="Type a message..."
+      (keydown.enter)="sendMessage()"
+    />
 
     <button (click)="sendMessage()">➤</button>
   </div>

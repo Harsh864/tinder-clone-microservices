@@ -3,29 +3,20 @@ spring:
     name: authService
 
   datasource:
-    url: jdbc:mysql://localhost:3306/tinder
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://ep-bitter-dream-b4m5bb2b-pooler.c-6.us-east-2.aws.neon.tech/tinder?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_BDlqShZ6RzU8
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
 
 server:
   port: 8081
 
 jwt:
   secret: justexpandingmyknowledgeinmicroserviesothaticanusemyknowledgetoachievethesomethingbig
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
 
   instance:
     prefer-ip-address: true
