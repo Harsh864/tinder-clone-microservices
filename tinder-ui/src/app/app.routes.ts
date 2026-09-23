@@ -6,6 +6,7 @@ import { ProfileForm } from './profile-form/profile-form';
 import { ChatBox } from './chat-box/chat-box';
 
 export const routes: Routes = [
+    { path: '', redirectTo: 'login', pathMatch: 'full'},
     { path: 'login', component: Login },
     { path: 'register', component: Register},
     { path: 'profile', component: Profiles},

@@ -12,6 +12,16 @@ public class ProfileResponse {
 
     private String imageUrl;
 
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
+    }
+
+    private String interests;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -20,12 +30,13 @@ public class ProfileResponse {
         this.imageUrl = imageUrl;
     }
 
-    public ProfileResponse(String name, String email, int age, String bio, String imageUrl) {
+    public ProfileResponse(String name, String email, int age, String bio, String imageUrl, String interests) {
         this.name = name;
         this.email = email;
         this.age = age;
         this.bio = bio;
         this.imageUrl = imageUrl;
+        this.interests = interests;
     }
 
     public String getName() {

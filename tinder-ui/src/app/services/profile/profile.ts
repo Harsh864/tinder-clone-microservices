@@ -9,6 +9,7 @@ export interface AllProfiles {
   bio: string;
   imageUrl: string;
   gender: string;
+  interests: string;
 }
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileForm, UserProfile } from '../services/profile-form/profile-form';
 
@@ -19,8 +19,9 @@ export class FloatingHeader {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private profileForm: ProfileForm  // inject ProfileForm service
-  ) {}
+    private profileForm: ProfileForm,
+    private elementRef: ElementRef
+  ) { }
 
   ngOnInit() {
     // Fetch current user from backend
@@ -54,14 +55,24 @@ export class FloatingHeader {
     this.showPanel = !this.showPanel;
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+
+    if (!clickedInside) {
+      this.showPanel = false;
+    }
+  }
+
   openChat(chat: any) {
-    this.router.navigate(['/chat'], { 
-      state: { profile: {
-        email: chat.otherUserEmail,
-        name: chat.otherUserName,
-        imageUrl: chat.otherUserImageUrl
-      },
-      currentUserEmail: this.currentUserEmail // pass current user email for chat
+    this.router.navigate(['/chat'], {
+      state: {
+        profile: {
+          email: chat.otherUserEmail,
+          name: chat.otherUserName,
+          imageUrl: chat.otherUserImageUrl
+        },
+        currentUserEmail: this.currentUserEmail // pass current user email for chat
       }
     });
     this.showPanel = false;
@@ -69,6 +80,7 @@ export class FloatingHeader {
 
   logout() {
     this.router.navigate(['/login']);
+    localStorage.removeItem("token");
   }
 
   get totalUnread(): number {
