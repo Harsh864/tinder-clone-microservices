@@ -22,6 +22,8 @@ export class Profiles implements OnInit {
     private matches: Matches
   ) { }
 
+  bioExpanded = false;
+
   currentUser = {
     name: '',
     age: 0,
@@ -34,18 +36,18 @@ export class Profiles implements OnInit {
   index = 0;
   isMatch = false;
   matchedProfile: any;
-  email: string = '';  
+  email: string = '';
 
   ngOnInit(): void {
     // this.email = localStorage.getItem('user') ?? ''; 
-    this.getUserProfileUpdate();  
+    this.getUserProfileUpdate();
   }
 
   swipe(action: string, id: string, image: string, name: string) {
     console.log(action);
     const currentProfile = this.profiles[this.index];
 
-    this.matches.swipeUser(id, action).subscribe({  
+    this.matches.swipeUser(id, action).subscribe({
       next: (data) => {
         if (data === true) {
           this.isMatch = true;
@@ -102,16 +104,22 @@ export class Profiles implements OnInit {
   nextProfile() {
     if (this.profiles.length === 0) return;
     this.index = (this.index + 1) % this.profiles.length;
+    this.bioExpanded = false;
     this.cdr.detectChanges();
+  }
+
+  toggleBio(event: Event) {
+    event.stopPropagation();
+    this.bioExpanded = !this.bioExpanded;
   }
 
   openChat() {
     localStorage.setItem('matchedProfile', JSON.stringify(this.matchedProfile));
     this.router.navigate(['/chat'], {
-      state: { 
+      state: {
         profile: this.matchedProfile,
         currentUserEmail: this.currentUser.email
-       }
+      }
     });
   }
 }

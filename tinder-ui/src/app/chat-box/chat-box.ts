@@ -56,13 +56,15 @@ export class ChatBox implements OnInit {
 
     console.log('Current chatId:', this.chatId);
 
-    // --------------------------------------------------
+
+    // ==================================================
     // LOAD OLD MESSAGES
-    // --------------------------------------------------
+    // ==================================================
 
     this.chatService
       .loadMessages(this.matchedProfile.email)
       .subscribe({
+
         next: (data: any[]) => {
 
           console.log('Old messages:', data);
@@ -76,44 +78,51 @@ export class ChatBox implements OnInit {
             setTimeout(() => {
               this.scrollToBottom();
             }, 100);
+
           });
+
         },
 
         error: (error) => {
           console.error('Error loading messages:', error);
         }
+
       });
 
 
-    // --------------------------------------------------
+    // ==================================================
     // WEBSOCKET
-    // --------------------------------------------------
+    // ==================================================
 
     this.chatService.connect(
       this.currentUser,
+
       (msg: any) => {
 
         console.log('WebSocket message received:', msg);
+
         console.log('Received chatId:', msg.chatId);
         console.log('Current chatId:', this.chatId);
 
-        // Ignore messages belonging to another conversation
+
+        // Ignore messages from another conversation
         if (msg.chatId !== this.chatId) {
+
           console.log('Ignoring message from another chat');
+
           return;
         }
 
+
         this.zone.run(() => {
 
-          /*
-           * Avoid duplicate messages.
-           *
-           * If the backend echoes the message back to the
-           * sender, we don't want to add it twice because
-           * sendMessage() already adds it locally.
-           */
+          // ------------------------------------------
+          // CHECK DUPLICATE
+          // ------------------------------------------
+
           const duplicate = this.messages.some(existing => {
 
+            // If both have database ID
             if (
               msg.id != null &&
               existing.id != null
@@ -121,22 +130,25 @@ export class ChatBox implements OnInit {
               return existing.id === msg.id;
             }
 
+            // Fallback duplicate check
             return (
               existing.sender === msg.sender &&
               existing.receiver === msg.receiver &&
               existing.content === msg.content &&
               existing.timestamp === msg.timestamp
             );
+
           });
+
+
+          // ------------------------------------------
+          // ADD MESSAGE ONLY ONCE
+          // ------------------------------------------
 
           if (!duplicate) {
 
             console.log('Adding WebSocket message to UI');
 
-            /*
-             * Immutable update instead of push().
-             * This makes Angular change detection more reliable.
-             */
             this.messages = [
               ...this.messages,
               msg
@@ -161,9 +173,9 @@ export class ChatBox implements OnInit {
   }
 
 
-  // --------------------------------------------------
+  // ==================================================
   // SEND MESSAGE
-  // --------------------------------------------------
+  // ==================================================
 
   sendMessage(): void {
 
@@ -174,43 +186,55 @@ export class ChatBox implements OnInit {
     }
 
     if (!this.currentUser || !this.matchedProfile.email) {
-      console.error('Cannot send message: user/profile missing');
+
+      console.error(
+        'Cannot send message: user/profile missing'
+      );
+
       return;
     }
 
+
+    // ------------------------------------------
+    // CREATE MESSAGE
+    // ------------------------------------------
+
     const msg = {
+
       sender: this.currentUser,
+
       receiver: this.matchedProfile.email,
+
       content: message,
+
       chatId: this.chatId,
 
-      /*
-       * This is only for local UI purposes.
-       * Your backend can replace this with its own timestamp.
-       */
       timestamp: new Date().toISOString()
+
     };
+
 
     console.log('Sending message:', msg);
 
-    // --------------------------------------------------
-    // IMMEDIATELY SHOW MESSAGE IN UI
-    // --------------------------------------------------
 
-    this.messages = [
-      ...this.messages,
-      msg
-    ];
+    // ------------------------------------------
+    // DO NOT ADD MESSAGE HERE
+    // ------------------------------------------
+    //
+    // IMPORTANT:
+    // We previously had:
+    //
+    // this.messages = [...this.messages, msg];
+    //
+    // That caused the message to appear immediately.
+    //
+    // Then WebSocket sent the same message back,
+    // causing it to appear a second time.
+    //
+    // Now we let WebSocket add it ONCE after
+    // the backend receives/saves it.
+    // ------------------------------------------
 
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 50);
-
-    // --------------------------------------------------
-    // SEND TO BACKEND
-    // --------------------------------------------------
 
     try {
 
@@ -220,39 +244,39 @@ export class ChatBox implements OnInit {
 
     } catch (error) {
 
-      console.error('Error sending message:', error);
-
-      /*
-       * If sending fails, remove the locally added message.
-       */
-      this.messages = this.messages.filter(
-        m => m !== msg
+      console.error(
+        'Error sending message:',
+        error
       );
-
-      this.cdr.detectChanges();
 
     }
 
+
     // Clear input
     this.newMessage = '';
+
   }
 
 
-  // --------------------------------------------------
+  // ==================================================
   // CHAT ID
-  // --------------------------------------------------
+  // ==================================================
 
-  getChatId(user1: string, user2: string): string {
+  getChatId(
+    user1: string,
+    user2: string
+  ): string {
 
     return user1 < user2
       ? user1 + '_' + user2
       : user2 + '_' + user1;
+
   }
 
 
-  // --------------------------------------------------
+  // ==================================================
   // SCROLL
-  // --------------------------------------------------
+  // ==================================================
 
   scrollToBottom(): void {
 
@@ -260,11 +284,17 @@ export class ChatBox implements OnInit {
       return;
     }
 
-    const element = this.chatBody.nativeElement;
+    const element =
+      this.chatBody.nativeElement;
 
     element.scrollTo({
+
       top: element.scrollHeight,
+
       behavior: 'smooth'
+
     });
+
   }
+
 }

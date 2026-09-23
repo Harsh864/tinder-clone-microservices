@@ -14,22 +14,24 @@
 
     <!-- progress dots -->
     <div class="progress-dots">
-      <div *ngFor="let p of profiles; let i = index"
-           [ngClass]="i === index ? 'dot active' : 'dot'">
+      <div *ngFor="let p of profiles; let i = index" [ngClass]="i === index ? 'dot active' : 'dot'">
       </div>
     </div>
 
     <!-- card stack -->
     <div class="card-stack">
       <div class="card-bg"></div>
-      <div class="card">
-        <img [src]="profiles[index].imageUrl" />
+      <div class="card"> <img [src]="profiles[index].imageUrl" />
         <div class="card-gradient"></div>
         <div class="card-info">
-          <div class="card-name">{{ profiles[index].name }}, {{ profiles[index].age }}</div>
-          <div class="card-bio">{{ profiles[index].bio }}</div>
+          <div class="card-name"> {{ profiles[index].name }}, {{ profiles[index].age }} </div> <!-- BIO -->
+          <div class="card-bio" [class.expanded]="bioExpanded" (click)="toggleBio($event)"> {{ profiles[index].bio }}
+            <span class="bio-toggle"> {{ bioExpanded ? 'Show less' : 'Read more' }} </span>
+          </div> <!-- INTERESTS -->
           <div class="card-tags">
-            <span class="tag">{{ profiles[index].interests }}</span>
+            <span class="tag" *ngFor="let interest of profiles[index].interests.split(',')">
+              {{ interest.trim() }}
+            </span>
           </div>
         </div>
       </div>

@@ -18,5 +18,3 @@ server:
 jwt:
   secret: justexpandingmyknowledgeinmicroserviesothaticanusemyknowledgetoachievethesomethingbig
 
-  instance:
-    prefer-ip-address: true
