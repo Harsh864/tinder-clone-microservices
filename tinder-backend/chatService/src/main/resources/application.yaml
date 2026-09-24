@@ -13,11 +13,17 @@ spring:
     show-sql: true
 
 server:
-  port: 8085
-
-  instance:
-    prefer-ip-address: true
+  port: ${PORT:8085}
 
 services:
   user-service:
     url: ${USER_SERVICE_URL:http://localhost:8082}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

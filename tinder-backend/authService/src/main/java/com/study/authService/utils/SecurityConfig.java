@@ -23,7 +23,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/getUserProfile").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/getUserProfile", "/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 );
 

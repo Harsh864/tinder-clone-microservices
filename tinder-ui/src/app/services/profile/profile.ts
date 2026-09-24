@@ -19,7 +19,7 @@ export class Profile {
 
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:9000/profile";
+  baseUrl: string = "https://api-gateway-deploy-v1.onrender.com/profile";
 
   getAllProfile(email: string): Observable<AllProfiles[]> {
     return this.http.get<AllProfiles[]>(this.baseUrl + "/allProfile/" + email);

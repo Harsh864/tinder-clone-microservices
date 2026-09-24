@@ -12,7 +12,7 @@ export class Chat {
   connect(userId: string, onMessage: any) {
 
     this.stompClient = new Client({
-      brokerURL: 'ws://localhost:9000/chat',
+      brokerURL: 'wss://api-gateway-deploy-v1.onrender.com/chat',
 
       connectHeaders: {
         user: userId
@@ -50,7 +50,7 @@ export class Chat {
 
   loadMessages(receiver: string) {
     return this.http.get<any[]>(
-      `http://localhost:9000/api/chat/${receiver}`
+      `https://api-gateway-deploy-v1.onrender.com/api/chat/${receiver}`
     );
   }
 }

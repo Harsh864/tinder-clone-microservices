@@ -44,7 +44,7 @@ export class FloatingHeader {
   }
 
   loadChats() {
-    this.http.get<any[]>(`http://localhost:9000/api/chat/chats/${this.currentUserEmail}`)
+    this.http.get<any[]>(`https://api-gateway-deploy-v1.onrender.com/api/chat/chats/${this.currentUserEmail}`)
       .subscribe(data => {
         console.log("Chats loaded:", data);
         this.chats = data;

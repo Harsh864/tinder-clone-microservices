@@ -17,7 +17,7 @@ export class Auth {
 
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:9000/auth";
+  baseUrl: string = "https://api-gateway-deploy-v1.onrender.com/auth";
 
   loginUser(email: string, password: string): Observable<any> {
     return this.http.post<any>(this.baseUrl + "/login", { email, password });

@@ -24,7 +24,7 @@ spring:
 
 
 server:
-  port: 9000
+  port: ${PORT:9000}
 jwt:
   secret: justexpandingmyknowledgeinmicroserviesothaticanusemyknowledgetoachievethesomethingbig
 

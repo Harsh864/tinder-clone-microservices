@@ -9,6 +9,7 @@ import com.study.chatService.service.MessageService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,9 @@ public class MessageServiceImpl implements MessageService {
             );
         }
 
-        message.setTimestamp(LocalDateTime.now());
+        message.setTimestamp(
+                LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        );
         return messageRepository.save(message);
     }
 

@@ -48,7 +48,10 @@ export class ChatBox implements OnInit {
       return;
     }
 
-    // Create deterministic chat ID
+    // ==================================================
+    // CREATE DETERMINISTIC CHAT ID
+    // ==================================================
+
     this.chatId = this.getChatId(
       this.currentUser,
       this.matchedProfile.email
@@ -71,7 +74,17 @@ export class ChatBox implements OnInit {
 
           this.zone.run(() => {
 
-            this.messages = data || [];
+            /*
+             * Sort old messages by timestamp.
+             *
+             * Timestamp is created by the frontend when
+             * the message is originally sent.
+             */
+            this.messages = (data || []).sort(
+              (a, b) =>
+                new Date(a.timestamp).getTime() -
+                new Date(b.timestamp).getTime()
+            );
 
             this.cdr.detectChanges();
 
@@ -84,7 +97,12 @@ export class ChatBox implements OnInit {
         },
 
         error: (error) => {
-          console.error('Error loading messages:', error);
+
+          console.error(
+            'Error loading messages:',
+            error
+          );
+
         }
 
       });
@@ -99,16 +117,31 @@ export class ChatBox implements OnInit {
 
       (msg: any) => {
 
-        console.log('WebSocket message received:', msg);
+        console.log(
+          'WebSocket message received:',
+          msg
+        );
 
-        console.log('Received chatId:', msg.chatId);
-        console.log('Current chatId:', this.chatId);
+        console.log(
+          'Received chatId:',
+          msg.chatId
+        );
+
+        console.log(
+          'Current chatId:',
+          this.chatId
+        );
 
 
-        // Ignore messages from another conversation
+        // ==================================================
+        // IGNORE OTHER CONVERSATIONS
+        // ==================================================
+
         if (msg.chatId !== this.chatId) {
 
-          console.log('Ignoring message from another chat');
+          console.log(
+            'Ignoring message from another chat'
+          );
 
           return;
         }
@@ -116,53 +149,82 @@ export class ChatBox implements OnInit {
 
         this.zone.run(() => {
 
-          // ------------------------------------------
+
+          // ==================================================
           // CHECK DUPLICATE
-          // ------------------------------------------
+          // ==================================================
 
-          const duplicate = this.messages.some(existing => {
+          const duplicate = this.messages.some(
+            existing => {
 
-            // If both have database ID
-            if (
-              msg.id != null &&
-              existing.id != null
-            ) {
-              return existing.id === msg.id;
+              /*
+               * If backend provides an ID,
+               * use the ID to detect duplicates.
+               */
+              if (
+                msg.id != null &&
+                existing.id != null
+              ) {
+
+                return existing.id === msg.id;
+
+              }
+
+
+              /*
+               * Otherwise compare message properties.
+               */
+              return (
+                existing.sender === msg.sender &&
+                existing.receiver === msg.receiver &&
+                existing.content === msg.content &&
+                existing.timestamp === msg.timestamp
+              );
+
             }
-
-            // Fallback duplicate check
-            return (
-              existing.sender === msg.sender &&
-              existing.receiver === msg.receiver &&
-              existing.content === msg.content &&
-              existing.timestamp === msg.timestamp
-            );
-
-          });
+          );
 
 
-          // ------------------------------------------
-          // ADD MESSAGE ONLY ONCE
-          // ------------------------------------------
+          // ==================================================
+          // ADD MESSAGE
+          // ==================================================
 
           if (!duplicate) {
 
-            console.log('Adding WebSocket message to UI');
+            console.log(
+              'Adding WebSocket message to UI'
+            );
 
+
+            /*
+             * Add the new message and immediately
+             * sort everything by timestamp.
+             */
             this.messages = [
               ...this.messages,
               msg
-            ];
+            ].sort(
+              (a, b) =>
+                new Date(a.timestamp).getTime() -
+                new Date(b.timestamp).getTime()
+            );
+
 
             this.cdr.detectChanges();
 
+
             setTimeout(() => {
+
               this.scrollToBottom();
+
             }, 50);
+
 
           } else {
 
-            console.log('Duplicate message ignored');
+            console.log(
+              'Duplicate message ignored'
+            );
 
           }
 
@@ -170,6 +232,7 @@ export class ChatBox implements OnInit {
 
       }
     );
+
   }
 
 
@@ -185,7 +248,15 @@ export class ChatBox implements OnInit {
       return;
     }
 
-    if (!this.currentUser || !this.matchedProfile.email) {
+
+    // ==================================================
+    // VALIDATE USER
+    // ==================================================
+
+    if (
+      !this.currentUser ||
+      !this.matchedProfile.email
+    ) {
 
       console.error(
         'Cannot send message: user/profile missing'
@@ -195,9 +266,9 @@ export class ChatBox implements OnInit {
     }
 
 
-    // ------------------------------------------
+    // ==================================================
     // CREATE MESSAGE
-    // ------------------------------------------
+    // ==================================================
 
     const msg = {
 
@@ -209,38 +280,33 @@ export class ChatBox implements OnInit {
 
       chatId: this.chatId,
 
+      /*
+       * Timestamp is created by the FRONTEND.
+       *
+       * ISO format makes it easy to sort and store.
+       */
       timestamp: new Date().toISOString()
 
     };
 
 
-    console.log('Sending message:', msg);
+    console.log(
+      'Sending message:',
+      msg
+    );
 
 
-    // ------------------------------------------
-    // DO NOT ADD MESSAGE HERE
-    // ------------------------------------------
-    //
-    // IMPORTANT:
-    // We previously had:
-    //
-    // this.messages = [...this.messages, msg];
-    //
-    // That caused the message to appear immediately.
-    //
-    // Then WebSocket sent the same message back,
-    // causing it to appear a second time.
-    //
-    // Now we let WebSocket add it ONCE after
-    // the backend receives/saves it.
-    // ------------------------------------------
-
+    // ==================================================
+    // SEND TO BACKEND
+    // ==================================================
 
     try {
 
       this.chatService.sendMessage(msg);
 
-      console.log('Message sent to WebSocket');
+      console.log(
+        'Message sent to WebSocket'
+      );
 
     } catch (error) {
 
@@ -252,7 +318,10 @@ export class ChatBox implements OnInit {
     }
 
 
-    // Clear input
+    // ==================================================
+    // CLEAR INPUT
+    // ==================================================
+
     this.newMessage = '';
 
   }
@@ -275,7 +344,7 @@ export class ChatBox implements OnInit {
 
 
   // ==================================================
-  // SCROLL
+  // SCROLL TO BOTTOM
   // ==================================================
 
   scrollToBottom(): void {
@@ -284,8 +353,10 @@ export class ChatBox implements OnInit {
       return;
     }
 
+
     const element =
       this.chatBody.nativeElement;
+
 
     element.scrollTo({
 

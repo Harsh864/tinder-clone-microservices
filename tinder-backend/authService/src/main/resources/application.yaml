@@ -13,8 +13,16 @@ spring:
     show-sql: true
 
 server:
-  port: 8081
+  port: ${PORT:8081}
 
 jwt:
   secret: justexpandingmyknowledgeinmicroserviesothaticanusemyknowledgetoachievethesomethingbig
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

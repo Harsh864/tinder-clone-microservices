@@ -14,7 +14,7 @@ export interface UserProfile {
 export class ProfileForm {
   constructor(private http: HttpClient) {}
 
-  baseUrl: string = "http://localhost:9000/profile";
+  baseUrl: string = "https://api-gateway-deploy-v1.onrender.com/profile";
 
   getUserProfileUpdated(): Observable<any> {
     return this.http.get<any>(this.baseUrl + "/user");
